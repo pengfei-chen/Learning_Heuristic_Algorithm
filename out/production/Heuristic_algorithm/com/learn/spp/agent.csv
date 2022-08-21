@@ -1,0 +1,6 @@
+agent_id,o_zone_id,d_zone_id,node_sequence,distance
+1,1,2,12,6.0
+2,1,3,13,4.0
+3,1,4,134,5.0
+4,1,5,135,6.0
+5,1,6,1356,9.0
