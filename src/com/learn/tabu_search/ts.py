@@ -8,6 +8,8 @@ description：
 
 注：这段代码没有本地文件，自行很难调通。
 """
+
+"""
 from basic_class import Instance
 from tsp_gurobi import gurobi_solve
 import random
@@ -204,6 +206,9 @@ def main():
 if(__name__ == '__main__'):
     main()
     print('finished')
+    
+"""
+
 #%%
 import math
 import random
@@ -216,6 +221,6 @@ class Instance:
         self.points = [(random.randint(0, 100), random.randint(0, 100)) \
                        for i in range(n)]  # coordinates of nodes
         self.dist = {(i, j) : math.sqrt(sum((self.points[i][k] -self.points[j][k])**2 \
-                                            for k in range(2))) for i inrange(n) for j in range(i)} # edges between nodes
+                                            for k in range(2))) for i in range(n) for j in range(i)} # edges between nodes
     def __str__(self):
         pass
