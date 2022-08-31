@@ -7,9 +7,9 @@ public class Node implements Comparable{
     Data data;
     int d;
     double node_cost;				//目标值object
-    double[][][]lp_x;//记录lp解
+    double[][][]lp_x;               //记录lp解
     int[][][] node_x_map;//node_xij=1时,node_x_mapijk=1表示必须访问，node_x_mapijk=0表示不能访问
-    int[][] node_x;//0表示弧可以访问，1表示必须访问，-1表示不能访问
+    int[][] node_x;                 //0表示弧可以访问，1表示必须访问，-1表示不能访问
     ArrayList<ArrayList<Integer>> node_routes;		//定义车辆路径链表
     ArrayList<ArrayList<Double>> node_servetimes;	//定义花费时间链表
 
