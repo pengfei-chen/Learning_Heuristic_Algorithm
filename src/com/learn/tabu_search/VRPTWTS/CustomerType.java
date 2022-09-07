@@ -1,4 +1,4 @@
-package VRPTW;
+package com.learn.tabu_search.VRPTWTS;
 
 public class CustomerType {
 	int Number;//节点自身编号

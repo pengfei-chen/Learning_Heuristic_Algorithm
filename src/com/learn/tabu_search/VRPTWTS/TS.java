@@ -1,8 +1,8 @@
-package VRPTW;
+package com.learn.tabu_search.VRPTWTS;
  
-import static VRPTW.EvaluateRoute.*;
+import static com.learn.tabu_search.VRPTWTS.EvaluateRoute.*;
 import static java.lang.Math.*;
-import static VRPTW.Parameter.*;
+import static com.learn.tabu_search.VRPTWTS.Parameter.*;
 
 public class TS {
 	

@@ -1,12 +1,12 @@
-package VRPTW;
+package com.learn.tabu_search.VRPTWTS;
 
 import static java.lang.Math.*;
-import static VRPTW.Parameter.*;
-import static VRPTW.EvaluateRoute.*;
+import static com.learn.tabu_search.VRPTWTS.Parameter.*;
+import static com.learn.tabu_search.VRPTWTS.EvaluateRoute.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
-import VRPTW.RouteType;
+import com.learn.tabu_search.VRPTWTS.RouteType;
 
 public class InitAndPrint {
 	
@@ -26,7 +26,7 @@ public class InitAndPrint {
 		}
 		
 		try {	
-			Scanner in = new Scanner(new FileReader("c101.txt"));
+			Scanner in = new Scanner(new FileReader("src\\com\\learn\\tabu_search\\VRPTWTS\\c101.txt"));
 			
 			 for ( int i = 1; i <= CustomerNumber + 1; ++i ) {
 				 customers[i].Number=in.nextInt()+1;

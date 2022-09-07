@@ -1,6 +1,6 @@
-package VRPTW;
+package com.learn.tabu_search.VRPTWTS;
 
-import static VRPTW.Parameter.*;
+import static com.learn.tabu_search.VRPTWTS.Parameter.*;
 
 public class EvaluateRoute {
 	

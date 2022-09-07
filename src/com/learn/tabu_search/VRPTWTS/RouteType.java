@@ -1,4 +1,4 @@
-package VRPTW;
+package com.learn.tabu_search.VRPTWTS;
 
 import java.util.ArrayList;
 

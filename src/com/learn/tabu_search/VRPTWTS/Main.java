@@ -1,7 +1,7 @@
-package VRPTW;
+package com.learn.tabu_search.VRPTWTS;
 
-import static VRPTW.InitAndPrint.*;  
-import static VRPTW.TS.*;
+import static com.learn.tabu_search.VRPTWTS.InitAndPrint.*;
+import static com.learn.tabu_search.VRPTWTS.TS.*;
 
 public class Main {
 	public static void main (String arg[]) {
