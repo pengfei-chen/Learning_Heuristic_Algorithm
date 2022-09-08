@@ -32,7 +32,7 @@ public class TS {
 	        for ( int i = 2; i <= CustomerNumber + 1; ++i ) {//对每一个客户节点
 	            for ( int j = 1; j < routes[customers[i].R].V.size(); ++j ) {//对其所在路径中的每一个节点
 	                if ( routes[customers[i].R].V.get(j).Number == i ) {//找到节点i在其路径中所处的位置j
-	                    P = j;//标记位置
+	                    P = j;					//标记位置，作用是：找到节点i在其路径中所处的位置j
 	                    break;
 	                }
 	            }
@@ -60,6 +60,10 @@ public class TS {
 	                            if((TempV < Ans)|| //藐视准则，如果优于全局最优解
 	                            		(TempV < BestV &&   //或者为局部最优解，且未被禁忌
 	                            		   ( routes[j].V.size() > 2 && Tabu[i][j] <= Iteration ) || ( routes[j].V.size() == 2 && TabuCreate[i] <= Iteration )))
+									/*
+									 * TODO :判断了，但是什么也没做，这是为什么？
+									 * */
+
 	                            	//禁忌插入操作，前者为常规禁忌表，禁忌插入算子；后者为特殊禁忌表，禁忌使用新的车辆
 	            	            	//路径中节点数超过2，判断是否禁忌插入算子；路径中只有起点、终点，判断是否禁忌使用新车辆。
 	                            if ( TempV < BestV ) { //记录局部最优情况
