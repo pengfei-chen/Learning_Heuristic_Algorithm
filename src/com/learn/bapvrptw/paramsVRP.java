@@ -23,7 +23,7 @@ public class paramsVRP {
   public double[][] distBase; // original distances for the Branch and Bound
   public double[][] dist; // distances that will be updated during the B&B before being used in the CG & SPPRC
   public double[][] ttime;
-  public double[][] edges; // weight of each edge during branch and bound
+  public double[][] edges; // weight of each edge during branch and bound ：在分枝和定界过程中每条边的权重
   public double[] posx, posy, d, wval;
   public int[][] shrink;
   public int[] a; // time windows: a=early, b=late, s=service

@@ -81,7 +81,7 @@ public class columngen {
       // lpmatrix[i] = cplex.addRange(1.0, 1.0); 
       // or for each constraint, right member=1 ... what is the best?
 
-      // Declaration of the variables
+      // Declaration of the variables：声明变量
       IloNumVarArray y = new IloNumVarArray(); // y_p to define whether a path p
                                                // is used
 
@@ -98,16 +98,21 @@ public class columngen {
           city = r.getpath().get(i);
           cost += userParam.dist[prevcity][city];
           prevcity = city;
-        }
+          }
 
         r.setcost(cost);
+        // 这里是直接使用 cplex 自带的列生成算法么？  返回的列是什么？ 有啥作用？
+        // 不是，只是增加一种 cplex 格式 的列？还是定义了目标函数？
+        // 正解： 创建一个Column对象，用于将一个新变量作为系数为val的线性项添加到目标obj中。
+        // 参见： https://www.ibm.com/docs/en/icos/12.8.0.0?topic=im-column-method
         IloColumn column = cplex.column(objfunc, r.getcost()); 
         // obj coefficient
         for (i = 1; i < r.getpath().size() - 1; i++) {
           v = r.getpath().get(i) - 1;
           column = column.and(cplex.column(lpmatrix[v], 1.0)); 
           // coefficient of y_i in (3.23) => 0 for the other y_p
-        }
+            }
+        // cplex.numVar 创建一个新的变量
         y.add(cplex.numVar(column, 0.0, Double.MAX_VALUE)); 
         // creation of the variable y_i
       }
@@ -128,7 +133,7 @@ public class columngen {
           newroute.addcity(i + 1);
           newroute.addcity(userParam.nbclients + 1);
           newroute.setcost(cost);
-          routes.add(newroute);
+          routes.add(newroute);   // 这一循环中，产生了多少条routes ？
         }
       }
 
@@ -169,9 +174,12 @@ public class columngen {
         // ---------------------------------------------------------
         // first define the new costs for the subproblem objective function
         // (SPPRC)
-        pi = cplex.getDuals(lpmatrix);
+        pi = cplex.getDuals(lpmatrix);    // 获取对偶解
         for (i = 1; i < userParam.nbclients + 1; i++)
           for (j = 0; j < userParam.nbclients + 2; j++)
+            // 这里其实有点陌生了，
+            // 通过求解RLMP问题或者RLMP对偶问题，得到我们想要的 对偶解值 以后，
+            // subproblem就是通过  检验数计算公式 这条公式，在图片中寻找检验数为负并且最小的变量，将变量对应的那一列添加到RLMP中。
             userParam.cost[i][j] = userParam.dist[i][j] - pi[i - 1];
 
         // start dynamic programming
@@ -187,7 +195,14 @@ public class columngen {
         // complete=true; // it the convergence is too slow, start a "complete"
         // shortestpast
         // }
-        sp.shortestPath(userParam, routesSPPRC, nbroute);
+        /*
+        * 子问题的目标是找到一条reduced cost最小的合法路径，然后加入到Linear Master Problem中。
+        * 其实，子问题被称为Elementary Shortest Path Problem with Resource Constraints （ESPPRC）也是一个著名的NP-Hard问题
+        *
+        * 可见：这里使用 shortestPath 是为了：子问题的目标是找到一条reduced cost最小的合法路径，然后加入到Linear Master Problem中。
+        * */
+
+        sp.shortestPath(userParam, routesSPPRC, nbroute);   //  shortestPath 是找到的结果
         sp = null;
 
         // /////////////////////////////
@@ -205,7 +220,7 @@ public class columngen {
               city = rout.get(i);
               cost += userParam.dist[prevcity][city];
               prevcity = city;
-              column = column.and(cplex.column(lpmatrix[rout.get(i) - 1], 1.0)); 
+              column = column.and(cplex.column(lpmatrix[rout.get(i) - 1], 1.0));    // and 在这里是什么用法？
               // coefficient of y_i in (3.23) => 0 for the other y_p
             }
             cost += userParam.dist[prevcity][userParam.nbclients + 1];

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/com/learn/bapvrptw/columngen.java" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/com/learn/tabu_search/VRPTWTS/CustomerType.java" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/com/learn/tabu_search/VRPTWTS/InitAndPrint.java" charset="GB2312" />
     <file url="file://$PROJECT_DIR$/src/com/learn/tabu_search/VRPTWTS/Main.java" charset="GB2312" />

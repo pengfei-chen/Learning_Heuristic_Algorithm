@@ -28,7 +28,8 @@ public class SPPRC {
 	
 	class label {
 		// we use a labelling algorith.
-		// labels are attached to each vertex to specify the state of the resources when we follow a corresponding feasible path ending at this vertex
+		// labels are attached to each vertex to specify the state of the resources
+		// when we follow a corresponding feasible path ending at this vertex
 		public int 		city; 				// current vertex
 		public int		indexPrevLabel;  	// previous label in the same path (i.e. previous vertex in the same path with the state of the resources)
 		public double	cost;				// first resource: cost (e.g. distance or strict travel time)
@@ -141,36 +142,39 @@ public class SPPRC {
 			boolean pathdom;
 			label la1,la2;
 			ArrayList<Integer> cleaning = new ArrayList<Integer>();
-			for (i = checkDom[current.city]; i < city2labels[current.city].size(); i++) {  // check for dominance between the labels added since the last time we came here with this city and all the other ones
+			for (i = checkDom[current.city]; i < city2labels[current.city].size(); i++) {
+				// check for dominance between the labels added since the last time we came
+				// here with this city and all the other ones
 				for (j = 0; j < i; j++) {
-          l1 = city2labels[current.city].get(i);
-          l2 = city2labels[current.city].get(j);
-          la1 = labels.get(l1);
-          la2 = labels.get(l2);
-          if (!(la1.dominated || la2.dominated)) {  // could happen since we clean 'city2labels' thanks to 'cleaning' only after the double loop
-						pathdom = true;
-						for (int k = 1; pathdom && (k < userParam.nbclients+2); k++) 
-							pathdom=(!la1.vertexVisited[k] || la2.vertexVisited[k]);
-						if (pathdom && (la1.cost<=la2.cost) && (la1.ttime<=la2.ttime) && (la1.demand<=la2.demand)) {
-							labels.get(l2).dominated = true;
-							U.remove((Integer) l2);
-							cleaning.add(l2);
-							pathdom = false;
-							//System.out.print(" ###Remove"+l2);
-						} 
-						pathdom = true;
-						for (int k = 1; pathdom && (k < userParam.nbclients + 2); k++) 
-							pathdom = (!la2.vertexVisited[k] || la1.vertexVisited[k]);
-						
-						if (pathdom && (la2.cost<=la1.cost) && (la2.ttime<=la1.ttime) && (la2.demand<=la1.demand)) {
-							labels.get(l1).dominated = true;
-							U.remove(l1);
-							cleaning.add(l1);
-							//System.out.print(" ###Remove"+l1);
-							j = city2labels[current.city].size();
+					  l1 = city2labels[current.city].get(i);
+					  l2 = city2labels[current.city].get(j);
+					  la1 = labels.get(l1);
+					  la2 = labels.get(l2);
+					  if (!(la1.dominated || la2.dominated)) {
+						  // could happen since we clean 'city2labels' thanks to 'cleaning' only after the double loop
+									pathdom = true;
+									for (int k = 1; pathdom && (k < userParam.nbclients+2); k++)
+										pathdom=(!la1.vertexVisited[k] || la2.vertexVisited[k]);
+									if (pathdom && (la1.cost<=la2.cost) && (la1.ttime<=la2.ttime) && (la1.demand<=la2.demand)) {
+										labels.get(l2).dominated = true;
+										U.remove((Integer) l2);
+										cleaning.add(l2);
+										pathdom = false;
+										//System.out.print(" ###Remove"+l2);
+									}
+									pathdom = true;
+									for (int k = 1; pathdom && (k < userParam.nbclients + 2); k++)
+										pathdom = (!la2.vertexVisited[k] || la1.vertexVisited[k]);
+
+									if (pathdom && (la2.cost<=la1.cost) && (la2.ttime<=la1.ttime) && (la2.demand<=la1.demand)) {
+										labels.get(l1).dominated = true;
+										U.remove(l1);
+										cleaning.add(l1);
+										//System.out.print(" ###Remove"+l1);
+										j = city2labels[current.city].size();
+									}
+							}
 						}
-					}
-				}
 			}
 			
 			for (Integer c : cleaning) 
@@ -194,7 +198,8 @@ public class SPPRC {
 					}
 				} else {  // if not the depot, we can consider extensions of the path
 					for (i = 0; i < userParam.nbclients + 2; i++) {
-						if ((!current.vertexVisited[i]) && (userParam.dist[current.city][i] < userParam.verybig-1e-6)) {  // don't go back to a vertex already visited or along a forbidden edge
+						if ((!current.vertexVisited[i]) && (userParam.dist[current.city][i] < userParam.verybig-1e-6)) {
+							// don't go back to a vertex already visited or along a forbidden edge
 							// ttime
 							tt = (float) (current.ttime + userParam.ttime[current.city][i] + userParam.s[current.city]);
 							if (tt < userParam.a[i])
@@ -217,9 +222,10 @@ public class SPPRC {
 										if ((tt2>userParam.b[j]) || (d2>userParam.capacity))
 											newcust[j]=true;  // useless to visit this client
 									}
-								
-								labels.add(new label(i, currentidx, current.cost+userParam.cost[current.city][i], tt, d, false, newcust));	// first label: start from depot (client 0)
-								if (!U.add((Integer) idx)) {  
+								// 这里才算把结果放进了 labels 里面
+								labels.add(new label(i, currentidx, current.cost+userParam.cost[current.city][i], tt, d, false, newcust));
+								// first label: start from depot (client 0)
+								if (!U.add((Integer) idx)) {  // 将指定的元素添加到此集合（如果尚未存在）。 返回 boolean
 									// only happens if there exists already a label at this vertex with the same cost, time and demand and visiting the same cities before
 									// It can happen with some paths where the order of the cities is permuted
 									labels.get(idx).dominated = true; // => we can forget this label and keep only the other one
@@ -238,28 +244,28 @@ public class SPPRC {
 		// filtering: find the path from depot to the destination
 		Integer lab;
 		i = 0;
-    while ((i < nbroute) && ((lab = P.pollFirst()) != null)) {
-      label s = labels.get(lab);
-      if (!s.dominated) {
-        if (/*(i < nbroute / 2) ||*/ (s.cost < -1e-4)) {
-          // System.out.println(s.cost);
-//        	if(s.cost > 0) {
-//        		System.out.println("warning >>>>>>>>>>>>>>>>>>>>");
-//        	}
-          route newroute = new route();
-          newroute.setcost(s.cost);
-          newroute.addcity(s.city);
-          int path = s.indexPrevLabel;
-          while (path >= 0) {
-            newroute.addcity(labels.get(path).city);
-            path = labels.get(path).indexPrevLabel;
-          }
-          newroute.switchpath();
-          routes.add(newroute);
-          i++;
-        }
-      }
+		while ((i < nbroute) && ((lab = P.pollFirst()) != null)) {
+		  label s = labels.get(lab);
+		  if (!s.dominated) {
+			if (/*(i < nbroute / 2) ||*/ (s.cost < -1e-4)) {
+			  // System.out.println(s.cost);
+	//        	if(s.cost > 0) {
+	//        		System.out.println("warning >>>>>>>>>>>>>>>>>>>>");
+	//        	}
+			  route newroute = new route();
+			  newroute.setcost(s.cost);
+			  newroute.addcity(s.city);
+			  int path = s.indexPrevLabel;
+			  while (path >= 0) {
+				newroute.addcity(labels.get(path).city);
+				path = labels.get(path).indexPrevLabel;
+			  }
+			  newroute.switchpath();
+			  routes.add(newroute);
+			  i++;
+			}
+		  }
 
-    }
+		}
 	}
 }
